@@ -3,16 +3,12 @@
 
 #nullable enable
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Xunit;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -537,6 +533,8 @@ namespace Microsoft.AspNetCore.Builder
         {
             public IServiceProvider ServiceProvider => this;
 
+            public IOptions<RouteHandlerOptions> RouteHandlerOptions { get; } = Options.Create(new RouteHandlerOptions());
+
             public IServiceScope CreateScope()
             {
                 return new EmptyServiceProvdier();
@@ -544,7 +542,6 @@ namespace Microsoft.AspNetCore.Builder
 
             public void Dispose()
             {
-
             }
 
             public object? GetService(Type serviceType)
@@ -553,6 +550,11 @@ namespace Microsoft.AspNetCore.Builder
                 {
                     return this;
                 }
+                else if (serviceType == typeof(IOptions<RouteHandlerOptions>))
+                {
+                    return RouteHandlerOptions;
+                }
+
                 return null;
             }
         }
