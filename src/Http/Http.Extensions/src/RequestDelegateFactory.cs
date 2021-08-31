@@ -562,6 +562,12 @@ namespace Microsoft.AspNetCore.Http
                     var feature = httpContext.Features.Get<IHttpRequestBodyDetectionFeature>();
                     if (feature?.CanHaveBody == true)
                     {
+                        if (!httpContext.Request.HasJsonContentType())
+                        {
+                            Log.UnexpectedContentType(httpContext, httpContext.Request.ContentType);
+                            httpContext.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+                            return;
+                        }
                         try
                         {
                             bodyValue = await httpContext.Request.ReadFromJsonAsync(bodyType);
@@ -594,6 +600,12 @@ namespace Microsoft.AspNetCore.Http
                     var feature = httpContext.Features.Get<IHttpRequestBodyDetectionFeature>();
                     if (feature?.CanHaveBody == true)
                     {
+                        if (!httpContext.Request.HasJsonContentType())
+                        {
+                            Log.UnexpectedContentType(httpContext, httpContext.Request.ContentType);
+                            httpContext.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+                            return;
+                        }
                         try
                         {
                             bodyValue = await httpContext.Request.ReadFromJsonAsync(bodyType);
@@ -607,7 +619,7 @@ namespace Microsoft.AspNetCore.Http
                         {
 
                             Log.RequestBodyInvalidDataException(httpContext, ex);
-                            httpContext.Response.StatusCode = 400;
+                            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                             return;
                         }
                     }
@@ -1169,6 +1181,14 @@ namespace Microsoft.AspNetCore.Http
                 @"Failed to bind parameter ""{ParameterType} {ParameterName}"" from HttpContext.",
                 EventName = "ParameterBindingFromHttpContextFailed")]
             private static partial void ParameterBindingFromHttpContextFailed(ILogger logger, string parameterType, string parameterName);
+
+            public static void UnexpectedContentType(HttpContext httpContext, string? contentType)
+                => UnexpectedContentType(GetLogger(httpContext), contentType ?? "(none)");
+
+            [LoggerMessage(6, LogLevel.Debug,
+                @"Expected json content-type but got {ContentType}.",
+                EventName = "UnexpectedContentType")]
+            private static partial void UnexpectedContentType(ILogger logger, string contentType);
 
             private static ILogger GetLogger(HttpContext httpContext)
             {
