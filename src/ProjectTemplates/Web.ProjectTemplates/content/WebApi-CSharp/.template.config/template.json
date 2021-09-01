@@ -36,6 +36,23 @@
           "exclude": [
             "Properties/launchSettings.json"
           ]
+        },
+        {
+          "condition": "(UseMinimalAPIs)",
+          "exclude": [
+            "Controllers/WeatherForecastController.cs",
+            "Program.cs",
+            "WeatherForecast.cs"
+          ],
+          "rename": {
+            "Program.MinimalAPIs.cs": "Program.cs"
+          }
+        },
+        {
+          "condition": "(UseControllers)",
+          "exclude": [
+            "Program.MinimalAPIs.cs"
+          ]
         }
       ]
     }
@@ -254,6 +271,12 @@
       "defaultValue": "false",
       "description": "Whether to use LocalDB instead of SQLite. This option only applies if --auth Individual or --auth IndividualB2C is specified."
     },
+    "UseMinimalAPIs": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to use mininmal APIs instead of Controllers."
+    },
     "Framework": {
       "type": "parameter",
       "description": "The target framework for the project.",
@@ -321,6 +344,10 @@
     "EnableOpenAPI": {
       "type": "computed",
       "value": "(!DisableOpenAPI)"
+    },
+    "UseControllers": {
+      "type": "computed",
+      "value": "(!UseMinimalAPIs)"
     }
   },
   "primaryOutputs": [

@@ -40,7 +40,7 @@ public class WeatherForecastController : ControllerBase
     public WeatherForecastController(ILogger<WeatherForecastController> logger,
                             IDownstreamWebApi downstreamWebApi)
     {
-            _logger = logger;
+        _logger = logger;
         _downstreamWebApi = downstreamWebApi;
     }
 
@@ -74,7 +74,7 @@ public class WeatherForecastController : ControllerBase
     public WeatherForecastController(ILogger<WeatherForecastController> logger,
                                         GraphServiceClient graphServiceClient)
     {
-            _logger = logger;
+        _logger = logger;
         _graphServiceClient = graphServiceClient;
     }
 

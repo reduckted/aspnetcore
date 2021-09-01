@@ -43,6 +43,14 @@
       "invertBoolean": true,
       "isVisible": true,
       "defaultValue": true
+    },
+    {
+      "id": "UseMinimalAPIs",
+      "name": {
+        "text": "Use _minimal APIs instead of Controllers"
+      },
+      "isVisible": true,
+      "defaultValue": false
     }
   ],
   "disableHttpsSymbol": "NoHttps"
